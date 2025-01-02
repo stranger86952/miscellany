@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>NPCA/festival2022-typing</title>
+  <script src="https://code.jquery.com/jquery-latest.js"></script>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div class="head">
+    <button type="button" class="idtitle">タイトルに戻る</button>
+    <button type="button" class="idgame">ゲーム</button>
+    <button type="button" class="idranking">ランキングを表示</button>
+  </div>
+  <div class="body">
+    <div class="title">
+      <h2>何これ</h2>
+      <p>タイピングゲームです。</p>
+      <p>文化祭1日前に急いで作りました。</p>
+      <h2>ルール</h2>
+      <p>ゲームが開始すると英語と日本語が表示されるので英語をタイピングしてください。</p>
+      <p>正しく文字を打つとスコアが+50、一単語打ち終えると+100されます。</p>
+      <p>正しく文字を入力するとボーナスが+1、一単語打ち終えるとさらに+1されます。</p>
+      <p>増えるスコアは+50+ボーナス、+100+ボーナスです。</p>
+      <p>ミスタイプするボーナスが0に戻されます。</p>
+    </div>
+    <div class="game">
+      <p>クリックでゲームスタート！</p>
+      <button type="button" class="idgaming">ゲームスタート</button>
+    </div>
+    <div class="gaming">
+      <p><span class="typtim">残り時間:</span> - <span class="typsco">スコア:</span></p>
+      <p><span class="typsta">ステータス:</span> - <span class="typbon">ボーナス: <span></p>
+      <p class="typans">英語:</p>
+      <p class="typpre">日本語:</p>
+      <p class="typnex">次に入力する文字:</p>
+      <p class="typnow">現在の入力:</p>
+    </div>
+    <div class="after">
+      <div class="result">
+        <p class="score">あなたのスコア:</p>
+        <p class="typm">1秒で平均n回タイピング</p>
+        <p><span class="typCA">正しく打った回数:</span> - <span class = "typMax">マックスボーナス:</span></p>
+      </div>
+      <p>ニックネーム入力</p>
+      <input type="text" class="entname" minlength="1" maxlength="40">
+      <button type="button" class="identry">ランキングに登録</button>
+      <button type="button" class="idtitle">タイトルに戻る</button>
+    </div>
+    <div class="ranking">
+      <span>ランキング</span>
+      <span>更新されていない場合はリロードしてください。</span>
+      <span>更新まで時間がかかることがあります。</span>
+      <table border="1" style="border-collapse: collapse">
+        <thead>
+          <tr>
+            <td>順位</td>
+            <td>名前</td>
+            <td>score</td>
+            <td>typing/s</td>
+          </tr>
+        </thead>
+        <tbody class="idgraph">
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="buttom">
+    <p>作成-<a href="https://github.com/stranger86952">stranger_86952</a></p>
+    <p>このゲームは<a href="https://fest.nada-sc.jp/">灘中学校第76回文化祭Turn-it-over</a>用に作ったものです</p>
+    <p>コンソールを使って簡単に不正することができます。しないでください。</p>
+  </div>
+  <script src="./script.js"></script>
+</body>
+</html>
