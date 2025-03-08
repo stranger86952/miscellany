@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <title>JMO2024yo-10</title>
+    <style>
+        body {
+            padding: 10px;
+        }
+        p {
+            margin-bottom: 5px;
+        }
+        #github-link {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="row">
+        <div class="col-md-3">
+            <h2>JMO2024yo-10 Simulator</h2>
+            <p>Problem: <a href="https://www.imojp.org/archive/mo2024/problems/jmo34yqa.pdf" target="_blank" rel="noopener noreferrer" style="color: blue;">JMO2024yo-10</a></p>
+            <p>Rows: <input type="number" id="rowsInput" min="1" value="10"></p>
+            <p>Columns: <input type="number" id="colsInput" min="1" value="10"></p>
+        </div>
+        <div class="col-md-9">
+            <p style="font-weight: bold;">簡単な解説</p>
+            <ul>
+                <li>隣り合う2マスの文字が同じ辺を<span style="font-weight: bold; color: orange;">"良い辺"</span>, 異なる辺を<span style="font-weight: bold; color: purple;">"悪い辺"</span>と呼ぶことにする. </li>
+                <li><span style="font-weight: bold; color: orange;">"良い辺"</span>が存在する時，その辺と同一直線上にある全ての辺は<span style="font-weight: bold; color: orange;">"良い辺"</span>である．</li>
+                <ul>
+                    <li>これは問題文の条件1, 条件2から確認できる. </li>
+                </ul>
+                <li>4つの辺の端点となる頂点について、それらが全て<span style="font-weight: bold; color: purple;">"悪い辺"</span>の時，その頂点の右上と左下のマスの文字は同じである. </li>
+                <ul>
+                    <li>これは問題文の条件2, 条件3から確認できる. </li>
+                </ul>
+                <li>以上を踏まえ、一番左上のマスを<span style="font-weight: bold;">J</span>, そこから一度だけ<span style="font-weight: bold; color: purple;">"悪い辺"</span>を跨いだマスを<span style="font-weight: bold;">M</span>とする. </li>
+                <li>この時, <span style="font-weight: bold; color: purple;">"悪い辺"</span>を黒く塗ると以下の図のようになる(辺をクリックすることで<span style="font-weight: bold;">良し悪し</span>を反転できる). </li>
+                <li>問題自体は簡単なので計算は頑張ってください. この図があればよりイメージしやすいと思います. </li>
+            </ul>
+        </div>
+    </div>
+    <a href="https://github.com/stranger86952" id="github-link" target="_blank" rel="noopener noreferrer">My GitHub</a>
+    <canvas id="gridCanvas" style="border: 4px solid #000;"></canvas>
+    <script>
+        // 汚いコードだね！！！！
+        // 初期設定
+        var canvas = document.getElementById("gridCanvas");
+        var ctx = canvas.getContext("2d");
+        var cellSize = 50;
+        var rows = 10;
+        var cols = 10;
+        var horizontalEdges = Array.from({ length: rows - 1 }, () => Array(cols).fill(0));
+        var verticalEdges = Array.from({ length: rows }, () => Array(cols - 1).fill(0));
+        canvas.width = cols * cellSize;
+        canvas.height = rows * cellSize;
+
+        // 更新
+        document.querySelectorAll('input').forEach(function (input) {
+            input.addEventListener('input', function () {
+                rows = Number(document.getElementById("rowsInput").value);
+                cols = Number(document.getElementById("colsInput").value);
+                canvas.height = rows * cellSize;
+                canvas.width = cols * cellSize;
+                horizontalEdges = Array.from({ length: rows - 1 }, () => Array(cols).fill(0));
+                verticalEdges = Array.from({ length: rows }, () => Array(cols - 1).fill(0));
+                drawGrid();
+            });
+        });
+
+        function drawGrid() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.font = "50px Arial";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+
+            // 全ての横の辺に性善説を適用
+            for (let i = 0; i < rows - 1; i++) {
+                for (let j = 0; j < cols; j++) {
+                    ctx.fillStyle = "white";
+                    ctx.fillRect(j * cellSize, (i + 1) * cellSize - 2, cellSize, 4);
+                }
+            }
+            // 全ての縦の辺に性善説を適用
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < cols - 1; j++) {
+                    ctx.fillStyle = "white";
+                    ctx.fillRect((j + 1) * cellSize - 2, i * cellSize, 4, cellSize);
+                }
+            }
+
+            // マスを良い感じにする
+            for (let i = 0; i < rows; i++){
+                let countHorizontal = 0;
+                for (let i2 = 0; i2 < i; i2++) {
+                    if(!(horizontalEdges[i2][0])) {
+                        countHorizontal++;
+                    }
+                }
+                for (let j = 0; j < cols; j++) {
+                    let countVertical = 0;
+                    for (let j2 = 0; j2 < j; j2++) {
+                        if(!(verticalEdges[0][j2])) {
+                            countVertical++;
+                        }
+                    }
+                    if((countHorizontal + countVertical) % 3 == 0) {
+                        ctx.fillStyle = "rgba(0, 255, 0, 0.5)";
+                        ctx.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
+                        ctx.fillStyle = "black";
+                        ctx.fillText("J", j * cellSize + cellSize / 2, i * cellSize + cellSize / 2 + 4);
+                    }
+                    else if((countHorizontal + countVertical) % 3 == 1) {
+                        ctx.fillStyle = "rgba(0, 0, 255, 0.5)";;
+                        ctx.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
+                        ctx.fillStyle = "black";
+                        ctx.fillText("M", j * cellSize + cellSize / 2, i * cellSize + cellSize / 2 + 4);
+                    }
+                    else {
+                        ctx.fillStyle = "rgba(255, 255, 0, 0.5)";
+                        ctx.fillRect(j * cellSize, i * cellSize, cellSize, cellSize);
+                        ctx.fillStyle = "black";
+                        ctx.fillText("O", j * cellSize + cellSize / 2, i * cellSize + cellSize / 2 + 4);
+                    }
+                }
+            }
+
+            // 成長過程で歪んだ横辺を黒くする
+            for (let i = 0; i < rows - 1; i++) {
+                for (let j = 0; j < cols; j++) {
+                    if(!(horizontalEdges[i][j])){
+                        ctx.fillStyle = "black";
+                        ctx.fillRect(j * cellSize, (i + 1) * cellSize - 2, cellSize, 4);
+                    }
+                }
+            }
+            // 成長過程で歪んだ縦辺を黒くする
+            for (let i = 0; i < rows; i++) {
+                for (let j = 0; j < cols - 1; j++) {
+                    if(!(verticalEdges[i][j])){
+                        ctx.fillStyle = "black";
+                        ctx.fillRect((j + 1) * cellSize - 2, i * cellSize, 4, cellSize);
+                    }
+                }
+            }
+        }
+
+        function toggleEdgeColor(x, y) {
+            // グリッドのセルサイズを計算
+            var cellWidth = canvas.width / cols;
+            var cellHeight = canvas.height / rows;
+
+            // クリックされた位置がどの辺に近いかを判定
+            var offsetX = x - Math.round(x / cellWidth) * cellWidth;
+            var offsetY = y - Math.round(y / cellHeight) * cellHeight;
+
+            // 横の辺と縦の辺のどちらに近いかを判定
+            if (Math.abs(offsetX) < Math.abs(offsetY) && Math.abs(offsetX) < cellWidth * 0.2) {
+                // 縦の辺に近い場合
+                for(var i = 0; i < rows; i++) {
+                    toggleVerticalEdge(i, Math.round(x / cellWidth)-1);
+                }
+            } else if(Math.abs(offsetY) < cellHeight * 0.2) {
+                // 横の辺に近い場合
+                for(var i = 0; i < cols; i++) {
+                    toggleHorizontalEdge(Math.round(y / cellHeight)-1, i);
+                }
+            }
+
+            // 描画を更新
+            drawGrid();
+        }
+
+        function toggleHorizontalEdge(i, j) {
+            horizontalEdges[i][j] = 1 - horizontalEdges[i][j];
+        }
+
+        function toggleVerticalEdge(i, j) {
+            verticalEdges[i][j] = 1 - verticalEdges[i][j];
+        }
+
+        // クリックされたらtoggleEdgeColorを呼び出すイベントリスナーを設定
+        canvas.addEventListener("click", (event) => {
+            var rect = canvas.getBoundingClientRect();
+            var x = event.clientX - rect.left;
+            var y = event.clientY - rect.top;
+
+            toggleEdgeColor(x, y);
+        });
+
+        // 初期描画
+        drawGrid();
+    </script>
+</body>
+</html>

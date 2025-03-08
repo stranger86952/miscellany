@@ -1,0 +1,41 @@
+body{
+  font-size: 24px;
+  margin: 0;
+  padding: 0;
+}
+button{
+  margin: 4px;
+  font-size: 32px;
+  color: #000000;
+  background-color: #ffffff
+}
+button:hover{
+  color: #4e4e4e;
+  background-color: #d6d6d6d6;
+}
+input{
+  font-size: 32px;
+}
+.head{
+  margin: 8px;
+}
+.body{
+  margin: 8px;
+}
+.game,.ranking{
+  margin: 20vh 0;
+  text-align: center;
+}
+.after,{.game,.ranking}*{
+  margin: 8px auto;
+}
+.buttom{
+  top: 100%;
+  margin: 0;
+  padding: 2px;
+  color: #000000;
+  background: #d6d6d6d6;
+}
+.buttom>p{
+  margin: 2px;
+}

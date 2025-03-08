@@ -1,0 +1,4 @@
+- miscellany : https://stranger86952.github.io/miscellany/
+- prime-number-judge : https://stranger86952.github.io/prime-number-judge/
+- wordle-solver : https://stranger86952.github.io/wordle-solver/
+- fes25 : https://stranger86952.github.io/fes25/puzzles/
